@@ -1,6 +1,5 @@
 name: 'Set repo information'
 description: 'Set github repo and docker hub environment variables'
-inputs:
 outputs:
   repo_owner:
     description: 'Owner of the github repo, i.e., "Interlisp" in repo "Interlisp/maiko"'
@@ -25,3 +24,4 @@ runs:
         DOCKER_OWNER=$(echo ${REPO_OWNER} | tr '[:upper:]' '[:lower:]')
         echo "DOCKER_OWNER=${DOCKER_OWNER}" >> ${GITHUB_ENV}
         echo ::set-output name=docker_owner::${DOCKER_OWNER}
+      shell: bash
