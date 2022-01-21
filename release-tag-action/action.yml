@@ -1,0 +1,23 @@
+name: 'Set release tag'
+description: 'Compute tag for this release set environment variables accordingly'
+outputs:
+  release_tag:
+    description: 'Tag to be used for this release based on latest commit date and shortref'
+    value: ${{ steps.only.outputs.release_tag }}
+  repo_name:
+    description: 'Name of the github repo, i.e., "maiko" in repo "Interlisp/maiko"'
+    value: ${{ steps.only.outputs.repo_name }}
+runs:
+  using: "composite"
+  steps:
+    - id: only
+      run: |
+        REPO_NAME=${GITHUB_REPOSITORY#*/}
+        COMMIT_SHORTREF=${GITHUB_SHA::8}
+        COMMIT_DATE=$(git show -s --date=format:'%y%m%d' --format=%cd ${GITHUB_SHA})
+        RELEASE_TAG=${REPO_NAME}-${COMMIT_DATE}-${COMMIT_SHORTREF}
+        #
+        echo "RELEASE_TAG=${RELEASE_TAG}" >> ${GITHUB_ENV} 
+        echo ::set-output name=release_tag::${RELEASE_TAG}
+        echo ::set-output name=repo_name::${REPO_NAME}
+      shell: bash
