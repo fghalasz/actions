@@ -12,11 +12,14 @@ runs:
       with:
         path: ../check-SHA-${{ github.sha }}
         key: check-SHA-${{ github.sha }}
+    - id: res
+      if: ${{ steps.check.outputs.cache-hit }} == ${{ true }}
+      run: echo ::set_output name=no_cache::"false"
     - id: output
       run: |
-        RESULT="${{ steps.check.outputs.cache-hit }}";
-        if [ "${RESULT}" = "true" ] && [ ! -e ../check-SHA-${{ github.sha }}) ] ; \
-          then RESULT="false";
-        if ["${RESULT}" == "true"]; then RESULT="false"; else RESULT="true"; fi
-        echo ::set-output name=release_not_built::${RESULT}
+        NO_CACHE="${{ steps.res.outputs.no_cache }}";
+        if [ "$NO_CACHE" = ""] then NO_CACHE="true"
+        if [ "${NO_CACHE}" = "false" ] && [ ! -e ../check-SHA-${{ github.sha }} ] ; \
+          then NO_CACHE="true";
+        echo ::set-output name=release_not_built::${NO_CACHE}
       shell: bash
