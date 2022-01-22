@@ -13,7 +13,7 @@ runs:
         path: ./check-SHA-${{ github.sha }}
         key: check-SHA-${{ github.sha }}
     - id: res
-      if: ${{ steps.check.outputs.cache-hit }} == ${{ true }}
+      if: ${{ steps.check.outputs.cache-hit }}
       run: echo ::set_output name=no_cache::"false"
       shell: bash
     - id: output
@@ -22,6 +22,6 @@ runs:
         if [ "$NO_CACHE" = "" ]; then NO_CACHE="true"; fi
         if [ "${NO_CACHE}" = "false" ] && [ ! -e ./check-SHA-${{ github.sha }} ] ;\
           then NO_CACHE="true" ; fi
-        rm ./check-SHA-${{ github.sha }} || true
+        rmdir ./check-SHA-${{ github.sha }} || true
         echo ::set-output name=release_not_built::${NO_CACHE}
       shell: bash
