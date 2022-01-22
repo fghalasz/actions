@@ -4,12 +4,10 @@ runs:
   using: "composite"
   steps:
     - id: set
-      run: |
-         mkdir -p ../check-SHA-${{ github.sha }}
+      run: mkdir -p ./check-SHA-${{ github.sha }}
       shell: bash
     - id: save
       uses: actions/cache@v2.1.7
       with:
-        path: ../check-SHA-${{ github.sha }}
+        path: ./check-SHA-${{ github.sha }}
         key: check-SHA-${{ github.sha }}
-
