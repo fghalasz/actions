@@ -10,8 +10,11 @@ runs:
     - id: check
       uses: actions/cache@v2.1.7
       with:
-        path: ../check-SHA-${{ github.sha }}
+        path: ./check-SHA-${{ github.sha }}
         key: check-SHA-${{ github.sha }}
+    - id: move
+      run: mv ./check-SHA-${{ github.sha }} .. || true
+      shell: bash
     - id: res
       if: ${{ steps.check.outputs.cache-hit }} == ${{ true }}
       run: echo ::set_output name=no_cache::"false"
@@ -19,7 +22,7 @@ runs:
     - id: output
       run: |
         NO_CACHE="${{ steps.res.outputs.no_cache }}";
-        if [ "$NO_CACHE" = ""]; then NO_CACHE="true"; fi
+        if [ "$NO_CACHE" = "" ]; then NO_CACHE="true"; fi
         if [ "${NO_CACHE}" = "false" ] && [ ! -e ../check-SHA-${{ github.sha }} ] ;\
           then NO_CACHE="true" ; fi
         echo ::set-output name=release_not_built::${NO_CACHE}
