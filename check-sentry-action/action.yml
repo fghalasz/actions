@@ -2,7 +2,7 @@ name: 'Check build sentry'
 description: 'Check for the sentry that indicates that a build with the current commit has already been completed'
 outputs:
   release_not_built:
-    description: 'Set to 'true' is a release with this commit has not been built'
+    description: "Set to 'true' is a release with this commit has not been built"
     value: ${{ steps.output.outputs.release_not_built }}
 runs:
   using: "composite"
