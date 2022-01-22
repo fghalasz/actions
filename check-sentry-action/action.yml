@@ -1,0 +1,22 @@
+name: 'Check build sentry'
+description: 'Check for the sentry that indicates that a build with the current commit has already been completed'
+outputs:
+  release_not_built:
+    description: 'Set to 'true' is a release with this commit has not been built'
+    value: ${{ steps.output.outputs.release_not_built }}
+runs:
+  using: "composite"
+  steps:
+    - id: check
+      uses: actions/cache@v2.1.7
+      with:
+        path: ../check-SHA-${{ github.sha }}
+        key: check-SHA-${{ github.sha }}
+    - id: output
+      run: |
+        RESULT="${{ steps.check.outputs.cache-hit }}";
+        if [ "${RESULT}" = "true" ] && [ ! -e ../check-SHA-${{ github.sha }}) ] ; \
+          then RESULT="false";
+        if ["${RESULT}" == "true"]; then RESULT="false"; else RESULT="true"; fi
+        echo ::set-output name=release_not_built::${RESULT}
+      shell: bash

@@ -1,0 +1,15 @@
+name: 'Set build sentry'
+description: 'Set the sentry that indicates that a build with the current commit has already been completed'
+runs:
+  using: "composite"
+  steps:
+    - id: set
+      run: |
+         mkdir -p ../check-SHA-${{ github.sha }}
+      shell: bash
+    - id: save
+      uses: actions/cache@v2.1.7
+      with:
+        path: ../check-SHA-${{ github.sha }}
+        key: check-SHA-${{ github.sha }}
+
