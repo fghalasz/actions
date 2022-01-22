@@ -14,7 +14,7 @@ runs:
         key: check-SHA-${{ github.sha }}
     - id: res
       if: ${{ steps.check.outputs.cache-hit }}
-      run: echo ::set_output name=no_cache::"false"
+      run: echo ::set-output name=no_cache::"false"
       shell: bash
     - id: output
       run: |
