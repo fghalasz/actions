@@ -16,7 +16,7 @@ runs:
   steps:
     - id: only
       run: |
-        if ("${{ github.event_name }}" == "workflow_dispatch")
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]
           then echo ::set-output name=regularized::'${{ inputs.github_event_inputs_obj }}'; echo "WD"
           else echo ::set-output name=regularized::'${{ inputs.inputs_obj }}'; echo "WC"
           fi
