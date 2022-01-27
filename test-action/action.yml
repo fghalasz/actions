@@ -1,5 +1,9 @@
 name: 'Test'
 description: 'test'
+inputs:
+  xyzzy:
+    description: "The name of the input to regularize"
+    required: true
 runs:
   using: "composite"
   steps:
