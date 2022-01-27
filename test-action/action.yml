@@ -1,0 +1,7 @@
+name: 'Test'
+description: 'test'
+runs:
+  using: "composite"
+  steps:
+    - id: check
+      run: echo ${{ toJSON(inputs) }}
