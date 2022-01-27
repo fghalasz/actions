@@ -8,5 +8,5 @@ runs:
   using: "composite"
   steps:
     - id: check
-      run: echo ${{ toJSON(inputs) }}
+      run: echo '${{ toJSON(inputs) }}'
       shell: bash
