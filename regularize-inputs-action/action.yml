@@ -1,0 +1,23 @@
+name: 'Regularize inputs'
+description: 'Output either the inputs object or the github.events.inputs'
+inputs:
+  inputs_obj:
+    description: "The inputs object"
+    required: true
+  github_event_inputs_obj:
+    description: "The github.event.inputs object"
+    required: true
+outputs:
+  regularized:
+    description: "The regularized inputs as object"
+    value: ${{ steps.only.outputs.regularized }}
+runs:
+  using: "composite"
+  steps:
+    - id: only
+      run: |
+        if ("${{ github.event_name }}" == "workflow_dispatch")
+          then echo ::set-output name=regularized::'${{ inputs.github_event_inputs_obj }}'
+          else echo ::set-output name=regularized::'${{ inputs.inputs_obj }}'
+          fi
+      shell: bash
