@@ -17,7 +17,7 @@ runs:
     - id: only
       run: >
         if [ "${{ github.event_name }}" = "workflow_dispatch" ];
-        then echo ::set-output name=regularized::'${{ inputs.github_event_inputs_obj }}';
-        else echo ::set-output name=regularized::'${{ inputs.inputs_obj }}';
+        then echo ::set-output name=regularized::'${{ toJSON(inputs.github_event_inputs_obj) }}';
+        else echo ::set-output name=regularized::'${{ toJSON(inputs.inputs_obj) }}';
         fi
       shell: bash
