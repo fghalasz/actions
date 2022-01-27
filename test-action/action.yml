@@ -5,3 +5,4 @@ runs:
   steps:
     - id: check
       run: echo ${{ toJSON(inputs) }}
+      shell: bash
