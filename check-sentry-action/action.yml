@@ -21,7 +21,6 @@ runs:
     - id: output
       if: ${{ always() }}
       run: >
-        echo "XXXXXXXXXXXXX";
         if [ -e ../sentry ]; 
         then echo ::set-output name=release_not_built::false;
         else echo ::set-output name=release_not_built::true;
