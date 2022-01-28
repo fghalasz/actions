@@ -18,6 +18,7 @@ runs:
         search_artifacts: true
         name: sentry-${{ github.sha }}
         path: ../sentry
+      continue-on-error: true
     - id: output
       if: ${{ always() }}
       run: >
