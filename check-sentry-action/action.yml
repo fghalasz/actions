@@ -1,5 +1,9 @@
 name: 'Check build sentry'
 description: 'Check for the sentry that indicates that a build with the current commit has already been completed'
+inputs:
+  workflow:
+    description: "the workflow using the sentry"
+    required: true
 outputs:
   release_not_built:
     description: "Set to 'true' is a release with this commit has not been built"
@@ -7,21 +11,18 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: check
-      uses: actions/cache@v2.1.7
+    - id: get_sentry
+      continue-on-error: true
+      uses: dawidd6/action-download-artifact@v2.16.0
       with:
-        path: ./check-SHA-${{ github.sha }}
-        key: check-SHA-${{ github.sha }}
-    - id: res
-      if: ${{ steps.check.outputs.cache-hit }}
-      run: echo ::set-output name=no_cache::"false"
-      shell: bash
+        workflow: ${{ inputs.workflow }}
+        search_artifacts: true
+        name: sentry-${{ github.sha }}
+        path: ../sentry
     - id: output
-      run: |
-        NO_CACHE="${{ steps.res.outputs.no_cache }}";
-        if [ "$NO_CACHE" = "" ]; then NO_CACHE="true"; fi
-        if [ "${NO_CACHE}" = "false" ] && [ ! -e ./check-SHA-${{ github.sha }} ] ;\
-          then NO_CACHE="true" ; fi
-        rmdir ./check-SHA-${{ github.sha }} || true
-        echo ::set-output name=release_not_built::${NO_CACHE}
+      run: >
+        if [ -e ../sentry ]; 
+        then echo ::set-output name=release_not_built::false;
+        else echo ::set-output name=release_not_built::true;
+        fi
       shell: bash

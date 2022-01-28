@@ -3,11 +3,12 @@ description: 'Set the sentry that indicates that a build with the current commit
 runs:
   using: "composite"
   steps:
-    - id: set
-      run: mkdir -p ./check-SHA-${{ github.sha }}
+    - id: file
+      run: echo ::set-output name=file::"$(cd ${{ github.workspace }} && cd .. && pwd)/sentry"
       shell: bash
-    - id: save
-      uses: actions/cache@v2.1.7
+    - run: echo ${{ github.sha }} > ${{ steps.file.outputs.file }}
+      shell: bash
+    - uses: actions/upload-artifact@v2
       with:
-        path: ./check-SHA-${{ github.sha }}
-        key: check-SHA-${{ github.sha }}
+        name: sentry-${{ github.sha }}
+        path: ${{ steps.file.outputs.file }}
