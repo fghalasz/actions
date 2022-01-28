@@ -12,7 +12,6 @@ runs:
   using: "composite"
   steps:
     - id: get_sentry
-      continue-on-error: true
       uses: dawidd6/action-download-artifact@v2.16.0
       with:
         workflow: ${{ inputs.workflow }}
@@ -20,6 +19,7 @@ runs:
         name: sentry-${{ github.sha }}
         path: ../sentry
     - id: output
+      if: ${{ always() }}
       run: >
         if [ -e ../sentry ]; 
         then echo ::set-output name=release_not_built::false;
